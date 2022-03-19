@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+  <script src="https://cdn.socket.io/socket.io-3.0.1.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <div class="row py-5 justify-content-center">
+        <div class="col-12">
+            <h4>Live Chat</h4>
+            <hr/>
+        </div>
+        <div class="col-12 table-bordered " style="height:300px;overflow-y: auto;">
+            <div id="output"></div>
+            </hr/>
+        </div>
+        <div class="col-12">
+            <div class="py-3 table-bordered-left">
+                <div class="form-group row ">
+                    <div class="col-3">
+                        <input type="text" class="form-control" id="user" placeholder="Your Name" name="user">
+                    </div>                        
+                    <div class="col-7">
+                            <input type="text" class="form-control" id="message" placeholder="Type message" name="message">
+                    </div>                        
+                    <div class="col-2">
+                        <button type="button" id="sendbtn" class="btn btn-primary btn-block">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const socket = io("http://localhost:3000");
+    socket.on('connection');
+    var message = document.getElementById("message");
+    var user = document.getElementById("user");
+    var sendbtn = document.getElementById("sendbtn");
+    var output = document.getElementById("output");
+    var feedback = document.getElementById("feedback");
+
+    sendbtn.addEventListener("click", function(){
+        socket.emit("livechat",{message:message.value,user:user.value});
+    });
+
+    socket.on("livechat",function(data){
+        output.innerHTML += "<p><b>"+data.user+"</b><br>"+data.message+"</p>";
+    });
+</script>
+</body>
+</html>
